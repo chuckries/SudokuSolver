@@ -19,39 +19,35 @@ namespace Sudoku
             }
         }
 
-        public Sudoku(Sudoku sudoku)
-        {
-            _sudoku = (int[,])sudoku._sudoku.Clone();
-        }
-
         public Sudoku Solve()
         {
-            Sudoku solution = SolveInternal(this);
+            Sudoku clone = new Sudoku(_sudoku);
+            Sudoku solution = clone.SolveInternal();
             if (solution == null) throw new Exception("No Solution!");
             return solution;
         }
 
-        private static Sudoku SolveInternal(Sudoku partialSolution)
+        private Sudoku SolveInternal()
         {
             //Console.WriteLine(partialSolution);
-            if (partialSolution.IsSolved()) return partialSolution;
+            if (IsSolved()) return this;
 
             int row, col;
-            if (!partialSolution.FindNextBlank(out row, out col))
+            if (!FindNextBlank(out row, out col))
             {
                 return null;
             }
 
-            int[] candidates = partialSolution.GetCandidates(row, col);
+            int[] candidates = GetCandidates(row, col);
             //Console.WriteLine(candidates.ToFormattedString());
             if (candidates.Length == 0) return null;
 
             // try each candidate
             foreach (int candidate in candidates)
             {
-                Sudoku newPartialSolution = new Sudoku(partialSolution);
-                newPartialSolution._sudoku[row,col] = candidate;
-                Sudoku attemptedSolve = SolveInternal(newPartialSolution);
+                Sudoku clone = new Sudoku(_sudoku);
+                clone._sudoku[row,col] = candidate;
+                Sudoku attemptedSolve = clone.SolveInternal();
                 if (attemptedSolve != null) return attemptedSolve;
             }
 
