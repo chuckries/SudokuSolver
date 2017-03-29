@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}\\Sudoku.csproj"
+                "${workspaceRoot}/Sudoku.csproj"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
